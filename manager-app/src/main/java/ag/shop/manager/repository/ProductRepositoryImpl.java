@@ -11,4 +11,15 @@ import java.util.List;
 public class ProductRepositoryImpl implements ProductRepository {
 
     private final List<Product> products = Collections.synchronizedList(new ArrayList<>());
+
+    private ProductRepositoryImpl() {
+        for(int i = 1; i < 4; i++) {
+            this.products.add(new Product(i, "Good №%d".formatted(i), "Description od the good №%d".formatted(i)));
+        }
+    }
+
+    @Override
+    public List<Product> findAll() {
+        return Collections.unmodifiableList(this.products);
+    }
 }
