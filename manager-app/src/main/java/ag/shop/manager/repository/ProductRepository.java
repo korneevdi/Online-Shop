@@ -3,8 +3,13 @@ package ag.shop.manager.repository;
 import ag.shop.manager.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository {
 
     List<Product> findAll();
+
+    Product save(Product product);
+
+    Optional<Product> findById(Integer productId);
 }
