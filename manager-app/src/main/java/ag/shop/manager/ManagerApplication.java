@@ -1,13 +1,12 @@
-package com.example.managerapp;
+package ag.shop.manager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ManagerAppApplication {
+public class ManagerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ManagerAppApplication.class, args);
+        SpringApplication.run(ManagerApplication.class, args);
     }
-
 }

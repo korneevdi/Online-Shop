@@ -1,10 +1,10 @@
-package com.example.managerapp;
+package ag.shop.manager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ManagerAppApplicationTests {
+class ManagerApplicationTests {
 
     @Test
     void contextLoads() {
