@@ -12,5 +12,8 @@
     <li><strong>Title</strong>: <span data-th-text = "${product.title}"></span></li>
     <li><strong>Description</strong>: <span data-th-text = "${product.description}"></span></li>
 </ul>
+<a data-th-href = "@{/catalogue/products/{productId}/edit(productId = ${product.id})}">
+    <button type = "button">Edit</button>
+</a>
 </body>
 </html>
