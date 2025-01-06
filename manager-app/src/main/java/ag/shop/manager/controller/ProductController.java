@@ -26,7 +26,7 @@ public class ProductController {
 
     @GetMapping
     public String getProduct() {
-        return "catalogue/products/products";
+        return "catalogue/products/product";
     }
 
     @GetMapping("edit")
