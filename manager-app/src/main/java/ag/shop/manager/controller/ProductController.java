@@ -34,4 +34,10 @@ public class ProductController {
         this.productService.updateProduct(product.getId(), payload.title(), payload.description());
         return "redirect:/catalogue/products/%d".formatted(product.getId());
     }
+
+    @PostMapping("delete")
+    public String deleteProduct(@ModelAttribute("product") Product product) {
+        this.productService.deleteProduct(product.getId());
+        return "redirect:/catalogue/products/list";
+    }
 }
