@@ -7,14 +7,22 @@
 <body>
 <a data-th-href = "@{/catalogue/products/{productId}(productId = ${product.id})}">&larr; To the product</a>
 <h1>Edit product &laquo;[[${product.title}]]&raquo;</h1>
+<div>
+    <h2>Errors occurred:</h2>
+    <ul>
+        <li data-th-each = "error: ${errors}" data-th-text = "${error}"></li>
+    </ul>
+</div>
 <form method = "post" data-th-action = "@{/catalogue/products/{productId}/edit(productId = ${product.id})}">
     <label>
         Title:<br>
-        <input type = "text" name = "title" data-th-value = "${product.title}">
+        <input type = "text" name = "title" data-th-value = "${payload != null ? payload.title : product.title}">
     </label><br>
     <label>
         Description:<br>
-        <textarea name = "description" data-th-text = "${product.description}"></textarea>
+        <textarea
+                name = "description" data-th-text = "${payload != null ? payload.description : product.description}">
+        </textarea>
     </label><br>
     <button type = "submit">Edit</button>
 </form>
