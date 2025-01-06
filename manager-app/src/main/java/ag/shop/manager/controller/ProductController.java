@@ -5,11 +5,13 @@ import ag.shop.manager.entity.Product;
 import ag.shop.manager.service.ProductService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -19,9 +21,12 @@ public class ProductController {
 
     private final ProductService productService;
 
+    private final MessageSource messageSource;
+
     @ModelAttribute("product")
     public Product product(@PathVariable("productId") int productId) {
-        return this.productService.findProduct(productId).orElseThrow();
+        return this.productService.findProduct(productId)
+                .orElseThrow(() -> new NoSuchElementException("catalogue.errors.product.not_found"));
     }
 
     @GetMapping
@@ -48,9 +53,11 @@ public class ProductController {
 
     @ExceptionHandler(NoSuchElementException.class)
     public String handleNoSuchElementException(NoSuchElementException exception, Model model,
-                                               HttpServletResponse response) {
+                                               HttpServletResponse response, Locale locale) {
         response.setStatus(HttpStatus.NOT_FOUND.value());
-        model.addAttribute("error", exception.getMessage());
+        model.addAttribute("error",
+                this.messageSource.getMessage(exception.getMessage(), new Object[0],
+                        exception.getMessage(), locale));
         return "errors/404";
     }
 }
