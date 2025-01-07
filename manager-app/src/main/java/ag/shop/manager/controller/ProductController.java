@@ -1,6 +1,5 @@
 package ag.shop.manager.controller;
 
-import ag.shop.manager.controller.payload.NewProductPayload;
 import ag.shop.manager.controller.payload.UpdateProductPayload;
 import ag.shop.manager.entity.Product;
 import ag.shop.manager.service.ProductService;
