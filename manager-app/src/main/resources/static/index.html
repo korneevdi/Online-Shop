@@ -3,8 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome &ndash; Shop</title>
+    <style>
+        /* Page background */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #f0f8ff, #87ceeb);
+            color: #333;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding-top: 20vh;
+        }
+
+        /* Title */
+        h1 {
+            font-size: 2.5em;
+            margin-top: 50px;
+        }
+
+        /* Button */
+        .button {
+            display: inline-block;
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 1em;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        /* Button hover effect */
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
 <h1>Welcome to our shop!</h1>
+<a href = "/catalogue/products/list" class = "button">To product list</a>
 </body>
 </html>
