@@ -7,7 +7,7 @@
 <body>
 <a data-th-href = "@{/catalogue/products/{productId}(productId = ${product.id})}">&larr; To the product</a>
 <h1>Edit product &laquo;[[${product.title}]]&raquo;</h1>
-<div>
+<div data-th-if = "${errors}">
     <h2>Errors occurred:</h2>
     <ul>
         <li data-th-each = "error: ${errors}" data-th-text = "${error}"></li>

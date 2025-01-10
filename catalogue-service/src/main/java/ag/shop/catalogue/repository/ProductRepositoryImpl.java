@@ -1,6 +1,6 @@
-package ag.shop.manager.repository;
+package ag.shop.catalogue.repository;
 
-import ag.shop.manager.entity.Product;
+import ag.shop.catalogue.entity.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

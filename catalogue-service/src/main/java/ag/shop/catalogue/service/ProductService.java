@@ -1,6 +1,6 @@
-package ag.shop.manager.service;
+package ag.shop.catalogue.service;
 
-import ag.shop.manager.entity.Product;
+import ag.shop.catalogue.entity.Product;
 
 import java.util.List;
 import java.util.Optional;
