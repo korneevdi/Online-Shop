@@ -1,9 +1,9 @@
 package ag.shop.manager.controller;
 
+import ag.shop.manager.client.BadRequestException;
 import ag.shop.manager.client.ProductsRestClient;
 import ag.shop.manager.controller.payload.NewProductPayload;
 import ag.shop.manager.entity.Product;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,16 +30,14 @@ public class ProductsController {
     }
 
     @PostMapping("create")
-    public String createProduct(@Valid NewProductPayload payload, BindingResult bindingResult, Model model) {
-        if(bindingResult.hasErrors()) {
-            model.addAttribute("payload", payload);
-            model.addAttribute("errors", bindingResult.getAllErrors().stream()
-                    .map(ObjectError::getDefaultMessage)
-                    .toList());
-            return "catalogue/products/new_product";
-        } else {
+    public String createProduct(NewProductPayload payload, Model model) {
+        try {
             Product product = this.productsRestClient.createProduct(payload.title(), payload.description());
             return "redirect:/catalogue/products/%d".formatted(product.id());
+        } catch (BadRequestException exception) {
+            model.addAttribute("payload", payload);
+            model.addAttribute("errors", exception.getErrors());
+            return "catalogue/products/new_product";
         }
     }
 }
