@@ -1,5 +1,7 @@
 package ag.shop.manager.client;
 
+import ag.shop.manager.controller.payload.NewProductPayload;
+import ag.shop.manager.controller.payload.UpdateProductPayload;
 import ag.shop.manager.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -37,6 +39,7 @@ public class ProductsRestClientImpl implements ProductsRestClient {
                     .post()
                     .uri("/catalogue-api/products")
                     .contentType(MediaType.APPLICATION_JSON)
+                    .body(new NewProductPayload(title, description))
                     .retrieve()
                     .body(Product.class);
         } catch (HttpClientErrorException exception) {
@@ -50,7 +53,7 @@ public class ProductsRestClientImpl implements ProductsRestClient {
         try{
             return Optional.of(this.restClient
                     .get()
-                    .uri("/catalogue-api/products/{productId}")
+                    .uri("/catalogue-api/products/{productId}", productId)
                     .retrieve()
                     .body(Product.class));
         } catch(HttpClientErrorException.NotFound exception) {
@@ -65,6 +68,7 @@ public class ProductsRestClientImpl implements ProductsRestClient {
                     .patch()
                     .uri("/catalogue-api/products/{productId}", productId)
                     .contentType(MediaType.APPLICATION_JSON)
+                    .body(new UpdateProductPayload(title, description))
                     .retrieve()
                     .toBodilessEntity();
         } catch (HttpClientErrorException exception) {
@@ -78,7 +82,7 @@ public class ProductsRestClientImpl implements ProductsRestClient {
         try{
             this.restClient
                     .delete()
-                    .uri("/catalogue-api/products/{productId}")
+                    .uri("/catalogue-api/products/{productId}", productId)
                     .retrieve()
                     .toBodilessEntity();
         } catch(HttpClientErrorException.NotFound exception) {
