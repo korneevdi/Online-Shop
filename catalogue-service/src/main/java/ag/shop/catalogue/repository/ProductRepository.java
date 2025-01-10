@@ -1,6 +1,6 @@
-package ag.shop.manager.repository;
+package ag.shop.catalogue.repository;
 
-import ag.shop.manager.entity.Product;
+import ag.shop.catalogue.entity.Product;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,7 @@
-package ag.shop.manager.service;
+package ag.shop.catalogue.service;
 
-import ag.shop.manager.entity.Product;
-import ag.shop.manager.repository.ProductRepository;
+import ag.shop.catalogue.entity.Product;
+import ag.shop.catalogue.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
