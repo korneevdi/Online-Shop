@@ -1,17 +1,8 @@
 package ag.shop.catalogue.repository;
 
 import ag.shop.catalogue.entity.Product;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
-import java.util.Optional;
+public interface ProductRepository extends CrudRepository<Product, Integer> {
 
-public interface ProductRepository {
-
-    List<Product> findAll();
-
-    Product save(Product product);
-
-    Optional<Product> findById(Integer productId);
-
-    void deleteById(Integer id);
 }
