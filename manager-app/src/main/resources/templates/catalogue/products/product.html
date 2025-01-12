@@ -3,20 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <title>[[${product.title}]] &ndash; Shop</title>
+    <style>
+        /* Page background and layout */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #f0f8ff, #87ceeb);
+            color: #333;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Navigation link */
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: black;
+            font-size: 1.2em;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #505050;
+        }
+
+        /* Title styling */
+        h1 {
+            font-size: 2.5em;
+            margin: 20px 0;
+        }
+
+        /* Product details */
+        .product-details {
+            text-align: left;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            max-width: 600px;
+        }
+
+        .product-details ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .product-details li {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 1em;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .delete-button {
+            background-color: #e74c3c;
+            border: none;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+    </style>
 </head>
 <body>
-<a data-th-href = "@{/catalogue/products/list}">&larr; To the product list</a>
-<h1 data-th-text = "${product.title}"></h1>
-<ul>
-    <li><strong>ID</strong>: <span data-th-text = "${product.id}"></span></li>
-    <li><strong>Title</strong>: <span data-th-text = "${product.title}"></span></li>
-    <li><strong>Description</strong>: <span data-th-text = "${product.description}"></span></li>
-</ul>
-<a data-th-href = "@{/catalogue/products/{productId}/edit(productId = ${product.id})}">
-    <button type = "button">Edit</button>
-</a>
-<form method = "post" data-th-action = "@{/catalogue/products/{productId}/delete(productId = ${product.id})}">
-    <button type = "submit">Delete</button>
-</form>
+<a class = "back-link" data-th-href = "@{/catalogue/products/list}">&larr; To the product list</a>
+<h1>[[${product.title}]]</h1>
+<div class = "product-details">
+    <ul>
+        <li><strong>Product ID:</strong> <span data-th-text="${product.id}"></span></li>
+        <li><strong>Title:</strong> <span data-th-text="${product.title}"></span></li>
+        <li><strong>Description:</strong> <span data-th-text="${product.description}"></span></li>
+    </ul>
+</div>
+<div class="button-container">
+    <a data-th-href="@{/catalogue/products/{productId}/edit(productId=${product.id})}" class="button">Edit product</a>
+    <form method="post" data-th-action="@{/catalogue/products/{productId}/delete(productId=${product.id})}">
+        <button type="submit" class="button delete-button">Delete product </button>
+    </form>
+</div>
 </body>
 </html>
