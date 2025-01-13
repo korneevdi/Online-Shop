@@ -113,6 +113,12 @@
     <p class="no-products">No products</p>
 </div>
 
+<form method = "get" data-th-action = "@{/catalogue/products/list}">
+    <label>Filter:<input type = "text" name = "filter" data-th-value = "${filter}">
+        <button type = "submit">Find</button>
+    </label>
+</form>
+
 <div data-th-if="${!products.isEmpty()}">
     <table>
         <thead>
