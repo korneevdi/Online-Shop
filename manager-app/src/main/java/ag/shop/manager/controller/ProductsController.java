@@ -19,7 +19,7 @@ public class ProductsController {
     @GetMapping("list")
     public String getProductList(Model model, @RequestParam(name = "filter", required = false) String filter) {
         model.addAttribute("products", this.productsRestClient.findAllProducts(filter));
-        model.addAttribute("filter");
+        model.addAttribute("filter", filter);
         return "catalogue/products/list";
     }
 
