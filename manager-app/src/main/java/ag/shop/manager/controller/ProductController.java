@@ -4,6 +4,7 @@ import ag.shop.manager.client.BadRequestException;
 import ag.shop.manager.client.ProductsRestClient;
 import ag.shop.manager.controller.payload.UpdateProductPayload;
 import ag.shop.manager.entity.Product;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -11,9 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.FieldError;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("catalogue/products/{productId:\\d+}")
@@ -48,8 +52,17 @@ public class ProductController {
             this.productsRestClient.updateProduct(product.id(), payload.title(), payload.description());
             return "redirect:/catalogue/products/%d".formatted(product.id());
         } catch (BadRequestException exception) {
+            // Преобразуем список FieldError в Map<String, String>
+            Map<String, String> fieldErrors = exception.getErrors().stream()
+                    .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+
+            model.addAttribute("errors", fieldErrors);
             model.addAttribute("payload", payload);
-            model.addAttribute("errors", exception.getErrors());
+
+            return "catalogue/products/edit";
+        } catch (JsonProcessingException exception) {
+            // Обработка ошибки сериализации/десериализации JSON
+            model.addAttribute("jsonError", "There was an error processing the request.");
             return "catalogue/products/edit";
         }
     }
