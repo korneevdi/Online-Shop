@@ -96,21 +96,25 @@
         }
     </style>
 </head>
+
 <body>
-<a class = "back-link" data-th-href = "@{/catalogue/products/list}">&larr; To the product list</a>
+<a class="back-link" data-th-href="@{/catalogue/products/list}">&larr; To the product list</a>
 <h1>[[${product.title}]]</h1>
-<div class = "product-details">
+
+<div class="product-details">
     <ul>
         <li><strong>Product ID:</strong> <span data-th-text="${product.id}"></span></li>
         <li><strong>Title:</strong> <span data-th-text="${product.title}"></span></li>
         <li><strong>Description:</strong> <span data-th-text="${product.description}"></span></li>
     </ul>
 </div>
+
 <div class="button-container">
     <a data-th-href="@{/catalogue/products/{productId}/edit(productId=${product.id})}" class="button">Edit product</a>
     <form method="post" data-th-action="@{/catalogue/products/{productId}/delete(productId=${product.id})}">
-        <button type="submit" class="button delete-button">Delete product </button>
+        <button type="submit" class="button delete-button">Delete product</button>
     </form>
 </div>
+
 </body>
 </html>
