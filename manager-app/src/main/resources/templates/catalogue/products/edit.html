@@ -89,16 +89,10 @@
         /* Error messages */
         .error {
             font-size: 0.9em;
-            color: #e74c3c;
+            color: red;
             text-align: left;
             width: 100%;
             margin-top: 5px;
-        }
-
-        /* Style for fields with errors */
-        input[type="text"].input-error,
-        textarea.input-error {
-            border-color: #e74c3c;
         }
 
         /* Navigation link */
@@ -115,6 +109,23 @@
         .back-link:hover {
             color: #505050;
         }
+
+        /* Container for errors */
+        .error-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+            margin: 10px 0;
+            color: #e74c3c;
+        }
+
+        /* Header for errors */
+        .error-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #e74c3c;
+        }
     </style>
 </head>
 <body>
@@ -123,19 +134,27 @@
     product</a>
 <h1>Edit product &laquo;[[${product.title}]]&raquo;</h1>
 
+<div data-th-if="${errors}" class="error-container">
+    <h2 class="error-header">Errors occurred, please correct</h2>
+</div>
+
 <form method="post" data-th-action="@{/catalogue/products/{productId}/edit(productId = ${product.id})}">
     <label for="title">Title:</label>
     <input type="text" id="title" name="title"
            data-th-value="${payload != null ? payload.title : product.title}"
            class="form-control" required>
-    <div class="error" data-th-if="${errors}" data-th-text="${errors['title']}"></div>
+    <div class="error" data-th-if="${errors}" data-th-text="${errors['title']}">
+        <br>
+    </div>
 
     <label for="description">Description:</label>
     <textarea id="description" name="description"
               data-th-text="${payload != null ? payload.description : product.description}"
-              class="form-control" required>
+              class="form-control">
     </textarea>
-    <div class="error" data-th-if="${errors}" data-th-text="${errors['description']}"></div>
+    <div class="error" data-th-if="${errors}" data-th-text="${errors['description']}">
+        <br>
+    </div>
 
     <button type="submit">Edit</button>
 </form>

@@ -150,7 +150,7 @@
 <body>
 <h1>Product list</h1>
 
-<div data-th-if="${products.size() > 0 || (filter != null && !filter.isEmpty())}">
+<div data-th-if="${products.size() > 1 || (filter != null && !filter.isEmpty())}">
     <form method="get" data-th-action="@{/catalogue/products/list}"
           style="display: flex; align-items: center; justify-content: center; gap: 10px;">
         <label>
@@ -170,7 +170,7 @@
 </div>
 
 <div data-th-if="${products.isEmpty()}">
-    <p class="no-products">No products</p>
+    <p class="no-products">No items found</p>
 </div>
 
 <div data-th-if="${!products.isEmpty()}">
