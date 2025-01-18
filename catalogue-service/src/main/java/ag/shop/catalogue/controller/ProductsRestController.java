@@ -26,7 +26,7 @@ public class ProductsRestController {
         return this.productService.findAllProducts(filter);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody NewProductPayload payload,
                                            BindingResult bindingResult,
                                            UriComponentsBuilder uriComponentsBuilder)

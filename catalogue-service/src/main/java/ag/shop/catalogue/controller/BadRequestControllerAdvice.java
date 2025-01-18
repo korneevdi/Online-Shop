@@ -19,8 +19,7 @@ public class BadRequestControllerAdvice {
     private final MessageSource messageSource;
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<ProblemDetail> handlerBindException(BindException exception, Locale locale) {
-
+    public ResponseEntity<ProblemDetail> handleBindException(BindException exception, Locale locale) {
         ProblemDetail problemDetail = ProblemDetail
                 .forStatusAndDetail(HttpStatus.BAD_REQUEST,
                         this.messageSource.getMessage("errors.400.title", new Object[0],
@@ -29,6 +28,7 @@ public class BadRequestControllerAdvice {
                 exception.getAllErrors().stream()
                         .map(ObjectError::getDefaultMessage)
                         .toList());
+
         return ResponseEntity.badRequest()
                 .body(problemDetail);
     }

@@ -40,7 +40,7 @@ public class ProductsRestClientImpl implements ProductsRestClient {
 
     @Override
     public Product createProduct(String title, String description) {
-        try{
+        try {
             return this.restClient
                     .post()
                     .uri("/catalogue-api/products")
@@ -48,9 +48,9 @@ public class ProductsRestClientImpl implements ProductsRestClient {
                     .body(new NewProductPayload(title, description))
                     .retrieve()
                     .body(Product.class);
-        } catch (HttpClientErrorException exception) {
+        } catch (HttpClientErrorException.BadRequest exception) {
             ProblemDetail problemDetail = exception.getResponseBodyAs(ProblemDetail.class);
-            throw new BadRequestException((List<FieldError>) problemDetail.getProperties().get("errors"));
+            throw new BadRequestException((List<String>) problemDetail.getProperties().get("errors"));
         }
     }
 
@@ -68,8 +68,8 @@ public class ProductsRestClientImpl implements ProductsRestClient {
     }
 
     @Override
-    public void updateProduct(int productId, String title, String description) throws JsonProcessingException {
-        try{
+    public void updateProduct(int productId, String title, String description) {
+        try {
             this.restClient
                     .patch()
                     .uri("/catalogue-api/products/{productId}", productId)
@@ -77,23 +77,9 @@ public class ProductsRestClientImpl implements ProductsRestClient {
                     .body(new UpdateProductPayload(title, description))
                     .retrieve()
                     .toBodilessEntity();
-        } catch (HttpClientErrorException exception) {
-            if (exception.getStatusCode() == HttpStatus.BAD_REQUEST) {
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode rootNode = mapper.readTree(exception.getResponseBodyAsString());
-
-                // Преобразуем JSON-ошибки в список FieldError
-                List<FieldError> fieldErrors = new ArrayList<>();
-                for (JsonNode errorNode : rootNode.get("errors")) {
-                    String field = errorNode.get("field").asText();
-                    String message = errorNode.get("message").asText();
-                    fieldErrors.add(new FieldError("product", field, message));
-                }
-
-                throw new BadRequestException(fieldErrors);
-            } else {
-                throw exception;
-            }
+        } catch (HttpClientErrorException.BadRequest exception) {
+            ProblemDetail problemDetail = exception.getResponseBodyAs(ProblemDetail.class);
+            throw new BadRequestException((List<String>) problemDetail.getProperties().get("errors"));
         }
     }
 

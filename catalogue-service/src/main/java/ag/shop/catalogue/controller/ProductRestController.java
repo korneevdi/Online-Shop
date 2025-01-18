@@ -43,26 +43,23 @@ public class ProductRestController {
                                            @Valid @RequestBody UpdateProductPayload payload,
                                            BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors()) {
-            // Собираем ошибки в формате field -> message
-            List<Map<String, String>> errors = bindingResult.getFieldErrors().stream()
-                    .map(error -> Map.of(
-                            "field", error.getField(),
-                            "message", error.getDefaultMessage()
-                    ))
-                    .toList();
-
-            // Возвращаем JSON с ошибками
-            return ResponseEntity.badRequest().body(Map.of("errors", errors));
+            if (bindingResult instanceof BindException exception) {
+                throw exception;
+            } else {
+                throw new BindException(bindingResult);
+            }
         } else {
             this.productService.updateProduct(productId, payload.title(), payload.description());
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent()
+                    .build();
         }
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteProduct(@PathVariable("productId") int productId) {
         this.productService.deleteProduct(productId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent()
+                .build();
     }
 
     @ExceptionHandler(NoSuchElementException.class)

@@ -126,6 +126,20 @@
             margin-bottom: 10px;
             color: #e74c3c;
         }
+
+        /* List of errors */
+        .error-list {
+            padding-left: 20px;
+            margin: 0;
+            color: #e74c3c;
+            list-style-type: disc;
+        }
+
+        /* Individual error item */
+        .error-item {
+            font-size: 0.95em;
+            color: #e74c3c;
+        }
     </style>
 </head>
 <body>
@@ -135,7 +149,10 @@
 <h1>Edit product &laquo;[[${product.title}]]&raquo;</h1>
 
 <div data-th-if="${errors}" class="error-container">
-    <h2 class="error-header">Errors occurred, please correct</h2>
+    <h2 class="error-header">Errors occurred, please correct:</h2>
+    <ul class="error-list">
+        <li data-th-each="error: ${errors}" data-th-text="${error}" class="error-item"></li>
+    </ul>
 </div>
 
 <form method="post" data-th-action="@{/catalogue/products/{productId}/edit(productId = ${product.id})}">
@@ -143,8 +160,6 @@
     <input type="text" id="title" name="title"
            data-th-value="${payload != null ? payload.title : product.title}"
            class="form-control" required>
-    <div class="error" data-th-if="${errors}" data-th-text="${errors['title']}">
-        <br>
     </div>
 
     <label for="description">Description:</label>
@@ -152,8 +167,6 @@
               data-th-text="${payload != null ? payload.description : product.description}"
               class="form-control">
     </textarea>
-    <div class="error" data-th-if="${errors}" data-th-text="${errors['description']}">
-        <br>
     </div>
 
     <button type="submit">Edit</button>
