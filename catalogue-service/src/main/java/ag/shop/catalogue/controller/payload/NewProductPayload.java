@@ -9,6 +9,6 @@ public record NewProductPayload(
         @Size(min = 2, max = 50, message = "{catalogue.products.create.errors.title_size_is_invalid}")
         String title,
 
-        @Size(max = 1000, message = "{catalogue.products.create.errors.description_size_is_invalid}")
+        @Size(max = 1000, message = "{catalogue.products.create.errors.details_size_is_invalid}")
         String description) {
 }

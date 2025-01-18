@@ -52,17 +52,8 @@ public class ProductController {
             this.productsRestClient.updateProduct(product.id(), payload.title(), payload.description());
             return "redirect:/catalogue/products/%d".formatted(product.id());
         } catch (BadRequestException exception) {
-            // Преобразуем список FieldError в Map<String, String>
-            Map<String, String> fieldErrors = exception.getErrors().stream()
-                    .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-
-            model.addAttribute("errors", fieldErrors);
             model.addAttribute("payload", payload);
-
-            return "catalogue/products/edit";
-        } catch (JsonProcessingException exception) {
-            // Обработка ошибки сериализации/десериализации JSON
-            model.addAttribute("jsonError", "There was an error processing the request.");
+            model.addAttribute("errors", exception.getErrors());
             return "catalogue/products/edit";
         }
     }

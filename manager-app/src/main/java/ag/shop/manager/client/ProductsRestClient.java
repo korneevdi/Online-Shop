@@ -14,7 +14,7 @@ public interface ProductsRestClient {
 
     Optional<Product> findProduct(int productId);
 
-    void updateProduct(int productId, String title, String description) throws JsonProcessingException;
+    void updateProduct(int productId, String title, String description);
 
     void deleteProduct(int productId);
 }

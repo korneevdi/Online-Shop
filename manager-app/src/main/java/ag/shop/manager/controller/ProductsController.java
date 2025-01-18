@@ -29,7 +29,8 @@ public class ProductsController {
     }
 
     @PostMapping("create")
-    public String createProduct(NewProductPayload payload, Model model) {
+    public String createProduct(NewProductPayload payload,
+                                Model model) {
         try {
             Product product = this.productsRestClient.createProduct(payload.title(), payload.description());
             return "redirect:/catalogue/products/%d".formatted(product.id());
