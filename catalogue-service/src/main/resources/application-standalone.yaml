@@ -1,3 +1,5 @@
+server:
+  port: 8081
 spring:
   security:
     user:
@@ -17,8 +19,6 @@ spring:
       - catalogue
   jpa:
     show-sql: true
-server:
-  port: 8081
 logging:
   level:
     sql: info

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product list &ndash; Shop</title>
+    <style>
+        /* Page background and layout */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #f0f8ff, #87ceeb);
+            color: #333;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 1em;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        /* Product table */
+        table {
+            width: 500px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 1em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        thead th {
+            background-color: #aaaaaa;
+            color: black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* Cells */
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        /* Column width */
+        th:first-child, td:first-child {
+            width: 25%;
+        }
+
+        th:last-child, td:last-child {
+            width: 75%;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #e6f7ff;
+        }
+
+        table a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        table a:hover {
+            color: black;
+            text-decoration: none;
+        }
+
+        /* Filter input field */
+        .filter-input {
+            width: 250px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-right: 10px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .filter-input:focus {
+            border-color: #4caf50;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Filter button */
+        .filter-button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .filter-button:hover {
+            background-color: #45a049;
+        }
+
+        .hidden {
+            padding: 10px 20px;
+            visibility: hidden;
+        }
+
+        /* No products message */
+        .no-products {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Product list</h1>
+
+<div data-th-if="${products.size() > 1 || (filter != null && !filter.isEmpty())}">
+    <form method="get" data-th-action="@{/catalogue/products/list}"
+          style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <label>
+            <input type="text" name="filter" data-th-value="${filter}"
+                   placeholder="Enter filter..." class="filter-input">
+        </label>
+
+        <!-- Filter button -->
+        <button type="submit" class="filter-button">Filter</button>
+
+        <!-- Reset button -->
+        <a data-th-href="@{/catalogue/products/list}"
+           class="filter-button"
+           style="display: inline-block; text-decoration: none;"
+           data-th-class="${filter != null && !filter.isEmpty() ? 'filter-button' : 'hidden'}">Reset</a>
+    </form>
+</div>
+
+<div data-th-if="${products.isEmpty()}">
+    <p class="no-products">No items found</p>
+</div>
+
+<div data-th-if="${!products.isEmpty()}">
+    <table>
+        <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Product</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-th-each="product : ${products}">
+            <td data-th-text="'sm-26-40 #' + ${product.id}"></td>
+
+            <td>
+                <a data-th-href="@{/catalogue/products/{productId}(productId = ${product.id})}"
+                   data-th-text="${product.title}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
