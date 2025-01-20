@@ -125,7 +125,7 @@ The __manager__ database contains 3 tables: _t_authority_, _t_user_, and _t_user
 
 The _t_authority_ table stores the manager authority, i.e. their role. You can set "ROLE_MANAGER" in the _c_authority_ column.
 
-The _t_user_ table stores the manager's username and password. Here you can set them. It is better to use a bcrypt-encoder to encode passwords in the database. If you do it, just write
+The _t_user_ table stores the manager's username and password. Here you can set them. It is better to use a [bcrypt generator](https://bcrypt-generator.com/) to encode passwords in the database. If you do it, just write
 
 ```
 {bcrypt}<you password>
