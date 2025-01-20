@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${product.title}]] &ndash; Shop</title>
+    <style>
+        /* Page background and layout */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #f0f8ff, #87ceeb);
+            color: #333;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Navigation link */
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: black;
+            font-size: 1.2em;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #505050;
+        }
+
+        /* Title styling */
+        h1 {
+            font-size: 2.5em;
+            margin: 20px 0;
+        }
+
+        /* Product details */
+        .product-details {
+            text-align: left;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            max-width: 600px;
+        }
+
+        .product-details ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .product-details li {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+
+<body>
+<a class="back-link" data-th-href="@{/catalogue/products/list}">&larr; To the product list</a>
+<h1>[[${product.title}]]</h1>
+
+<div class="product-details">
+    <ul>
+        <li><strong>Product ID:</strong> <span data-th-text="${product.id}"></span></li>
+        <li><strong>Title:</strong> <span data-th-text="${product.title}"></span></li>
+        <li><strong>Description:</strong> <span data-th-text="${product.description}"></span></li>
+    </ul>
+</div>
+
+</body>
+</html>
