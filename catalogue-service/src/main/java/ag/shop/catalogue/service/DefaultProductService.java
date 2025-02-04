@@ -1,11 +1,13 @@
 package ag.shop.catalogue.service;
 
 import ag.shop.catalogue.entity.Product;
+import ag.shop.catalogue.entity.ProductImage;
 import ag.shop.catalogue.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,8 +28,20 @@ public class DefaultProductService implements ProductService {
 
     @Override
     @Transactional
-    public Product createProduct(String title, String description) {
-        return this.productRepository.save(new Product(null, title, description));
+    public Product createProduct(String title, String description, List<String> imageUrls) {
+        Product product = new Product();
+        product.setTitle(title);
+        product.setDescription(description);
+
+        // Преобразуем ссылки в объекты ProductImage
+        if (imageUrls != null && !imageUrls.isEmpty()) {
+            List<ProductImage> images = imageUrls.stream()
+                    .map(url -> new ProductImage(null, product, url))
+                    .toList();
+            product.setImageUrls(images);
+        }
+
+        return this.productRepository.save(product);
     }
 
     @Override

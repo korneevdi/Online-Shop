@@ -10,7 +10,7 @@ public interface ProductsRestClient {
 
     List<Product> findAllProducts(String filter);
 
-    Product createProduct(String title, String description);
+    Product createProduct(String title, String description, List<String> imageUrls);
 
     Optional<Product> findProduct(int productId);
 

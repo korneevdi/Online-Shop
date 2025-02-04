@@ -37,13 +37,16 @@ public class ProductsRestController {
             } else {
                 throw new BindException(bindingResult);
             }
-        } else {
-            Product product = this.productService.createProduct(payload.title(), payload.description());
-            return ResponseEntity
-                    .created(uriComponentsBuilder
-                            .replacePath("/catalogue-api/products/{productId}")
-                            .build(Map.of("productId", product.getId())))
-                    .body(product);
         }
+
+        // Create a product with an image
+        Product product = this.productService.createProduct(payload.title(), payload.description(), payload.imageUrls());
+
+        return ResponseEntity
+                .created(uriComponentsBuilder
+                        .replacePath("/catalogue-api/products/{productId}")
+                        .build(Map.of("productId", product.getId())))
+                .body(product);
     }
+
 }

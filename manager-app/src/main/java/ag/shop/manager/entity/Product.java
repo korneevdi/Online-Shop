@@ -1,4 +1,6 @@
 package ag.shop.manager.entity;
 
-public record Product(int id, String title, String description) {
+import java.util.List;
+
+public record Product(int id, String title, String description, List<String> imageUrls) {
 }
