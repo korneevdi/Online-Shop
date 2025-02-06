@@ -31,6 +31,18 @@ public class ProductsController {
     @PostMapping("create")
     public String createProduct(NewProductPayload payload,
                                 Model model) {
+        System.out.println("###### ProductsController module manager-app ######");
+        System.out.println("Received title: " + payload.title());
+        System.out.println("Received description: " + payload.description());
+        System.out.println("Received imageUrls:");
+        if(payload.imageUrls() != null) {
+            for (String url : payload.imageUrls()) {
+                System.out.println(url);
+            }
+        } else {
+            System.out.println("null");
+        }
+
         try {
             Product product = this.productsRestClient
                     .createProduct(payload.title(), payload.description(), payload.imageUrls());
