@@ -40,6 +40,18 @@ public class ProductsRestClientImpl implements ProductsRestClient {
 
     @Override
     public Product createProduct(String title, String description, List<String> imageUrls) {
+        System.out.println("###### ProductsRestClientImpl module manager-app ######");
+        System.out.println("Received title: " + title);
+        System.out.println("Received description: " + description);
+        System.out.println("Received imageUrls:");
+        if(imageUrls != null) {
+            for (String url : imageUrls) {
+                System.out.println(url);
+            }
+        } else {
+            System.out.println("null");
+        }
+
         try {
             return this.restClient
                     .post()

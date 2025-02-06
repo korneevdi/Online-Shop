@@ -29,16 +29,28 @@ public class DefaultProductService implements ProductService {
     @Override
     @Transactional
     public Product createProduct(String title, String description, List<String> imageUrls) {
+        System.out.println("###### DefaultProductService module catalogue-service ######");
+        System.out.println("Received title: " + title);
+        System.out.println("Received description: " + description);
+        System.out.println("Received imageUrls:");
+        if(imageUrls != null) {
+            for (String url : imageUrls) {
+                System.out.println(url);
+            }
+        } else {
+            System.out.println("null");
+        }
+
         Product product = new Product();
         product.setTitle(title);
         product.setDescription(description);
 
-        // Преобразуем ссылки в объекты ProductImage
+        // Transform links into ProductImage objects
         if (imageUrls != null && !imageUrls.isEmpty()) {
             List<ProductImage> images = imageUrls.stream()
                     .map(url -> new ProductImage(null, product, url))
                     .toList();
-            product.setImageUrls(images);
+            product.setProductImages(images);
         }
 
         return this.productRepository.save(product);
@@ -46,7 +58,10 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public Optional<Product> findProduct(int productId) {
-        return this.productRepository.findById(productId);
+        Optional<Product> product = this.productRepository.findById(productId);
+        System.out.println("###### DefaultProductService: Retrieved product ######");
+        System.out.println(product);
+        return product;
     }
 
     @Override
