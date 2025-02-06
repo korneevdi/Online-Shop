@@ -160,18 +160,17 @@
     <input type="text" id="title" name="title"
            data-th-value="${payload?.title}"
            class="form-control" required>
-    <!--
-    <div class="error" data-th-if="${errors}" data-th-text="${errors['title']}"></div>
-    -->
 
     <label for="description">Description:</label>
     <textarea id="description" name="description"
               data-th-text="${payload?.description}"
               class="form-control">
     </textarea>
-    <!--
-    <div class="error" data-th-if="${errors}" data-th-text="${errors['description']}"></div>
-    -->
+
+    <label for="imageUrls">Image URL:</label>
+    <input type="text" id="imageUrls" name="imageUrls"
+           data-th-value="${payload?.imageUrls}"
+           class="form-control">
 
     <button type="submit">Create</button>
 </form>

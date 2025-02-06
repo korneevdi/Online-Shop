@@ -39,13 +39,13 @@ public class ProductsRestClientImpl implements ProductsRestClient {
     }
 
     @Override
-    public Product createProduct(String title, String description) {
+    public Product createProduct(String title, String description, List<String> imageUrls) {
         try {
             return this.restClient
                     .post()
                     .uri("/catalogue-api/products")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(new NewProductPayload(title, description))
+                    .body(new NewProductPayload(title, description, imageUrls))
                     .retrieve()
                     .body(Product.class);
         } catch (HttpClientErrorException.BadRequest exception) {
