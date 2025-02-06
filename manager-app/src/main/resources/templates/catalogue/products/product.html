@@ -106,7 +106,8 @@
         <li><strong>Product ID:</strong> <span data-th-text="${product.id}"></span></li>
         <li><strong>Title:</strong> <span data-th-text="${product.title}"></span></li>
         <li><strong>Description:</strong> <span data-th-text="${product.description}"></span></li>
-        <li><strong>Image URL:</strong>
+        <li>
+            <strong>Image URL:</strong>
             <span data-th-text="${product.imageUrls != null and not #lists.isEmpty(product.imageUrls) ? product.imageUrls[0] : 'No image'}"></span>
         </li>
     </ul>
