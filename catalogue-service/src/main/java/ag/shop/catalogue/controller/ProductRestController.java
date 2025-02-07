@@ -49,7 +49,8 @@ public class ProductRestController {
                 throw new BindException(bindingResult);
             }
         } else {
-            this.productService.updateProduct(productId, payload.title(), payload.description());
+            this.productService
+                    .updateProduct(productId, payload.title(), payload.description(), payload.imageUrls());
             return ResponseEntity.noContent()
                     .build();
         }

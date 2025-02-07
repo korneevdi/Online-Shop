@@ -107,8 +107,11 @@
         <li><strong>Title:</strong> <span data-th-text="${product.title}"></span></li>
         <li><strong>Description:</strong> <span data-th-text="${product.description}"></span></li>
         <li>
-            <strong>Image URL:</strong>
-            <span data-th-text="${product.imageUrls != null and not #lists.isEmpty(product.imageUrls) ? product.imageUrls[0] : 'No image'}"></span>
+            <strong>Image URLs:</strong>
+            <ul data-th-if="${product.imageUrls != null and not #lists.isEmpty(product.imageUrls)}">
+                <li data-th-each="url : ${product.imageUrls}" data-th-text="${url}"></li>
+            </ul>
+            <span data-th-if="${product.imageUrls == null or #lists.isEmpty(product.imageUrls)}">No images</span>
         </li>
     </ul>
 </div>

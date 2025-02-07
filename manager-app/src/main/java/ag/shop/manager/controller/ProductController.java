@@ -49,7 +49,8 @@ public class ProductController {
                                 UpdateProductPayload payload,
                                 Model model) {
         try {
-            this.productsRestClient.updateProduct(product.id(), payload.title(), payload.description());
+            this.productsRestClient
+                    .updateProduct(product.id(), payload.title(), payload.description(), payload.imageUrls());
             return "redirect:/catalogue/products/%d".formatted(product.id());
         } catch (BadRequestException exception) {
             model.addAttribute("payload", payload);

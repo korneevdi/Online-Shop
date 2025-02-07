@@ -80,13 +80,13 @@ public class ProductsRestClientImpl implements ProductsRestClient {
     }
 
     @Override
-    public void updateProduct(int productId, String title, String description) {
+    public void updateProduct(int productId, String title, String description, List<String> imageUrls) {
         try {
             this.restClient
                     .patch()
                     .uri("/catalogue-api/products/{productId}", productId)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(new UpdateProductPayload(title, description))
+                    .body(new UpdateProductPayload(title, description, imageUrls))
                     .retrieve()
                     .toBodilessEntity();
         } catch (HttpClientErrorException.BadRequest exception) {

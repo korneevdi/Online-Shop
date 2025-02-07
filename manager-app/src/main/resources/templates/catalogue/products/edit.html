@@ -160,14 +160,17 @@
     <input type="text" id="title" name="title"
            data-th-value="${payload != null ? payload.title : product.title}"
            class="form-control" required>
-    </div>
 
     <label for="description">Description:</label>
     <textarea id="description" name="description"
               data-th-text="${payload != null ? payload.description : product.description}"
               class="form-control">
     </textarea>
-    </div>
+
+    <label for="imageUrls">Image URL:</label>
+    <input type="text" id="imageUrls" name="imageUrls"
+           data-th-value="${payload != null ? payload.imageUrls : product.imageUrls}"
+           class="form-control">
 
     <button type="submit">Edit</button>
 </form>

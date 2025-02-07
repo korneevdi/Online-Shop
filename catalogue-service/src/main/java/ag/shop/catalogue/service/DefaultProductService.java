@@ -66,11 +66,21 @@ public class DefaultProductService implements ProductService {
 
     @Override
     @Transactional
-    public void updateProduct(Integer id, String title, String description) {
+    public void updateProduct(Integer id, String title, String description, List<String> imageUrls) {
         this.productRepository.findById(id)
                 .ifPresentOrElse(product -> {
                     product.setTitle(title);
                     product.setDescription(description);
+
+                    // Delete all old images and add new images
+                    product.getProductImages().clear();
+
+                    if (imageUrls != null && !imageUrls.isEmpty()) {
+                        List<ProductImage> newImages = imageUrls.stream()
+                                .map(url -> new ProductImage(null, product, url))
+                                .toList();
+                        product.getProductImages().addAll(newImages);
+                    }
                 }, () -> {throw new NoSuchElementException();
                 });
     }

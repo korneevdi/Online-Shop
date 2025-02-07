@@ -1,4 +1,6 @@
 package ag.shop.manager.controller.payload;
 
-public record UpdateProductPayload(String title, String description) {
+import java.util.List;
+
+public record UpdateProductPayload(String title, String description, List<String> imageUrls) {
 }

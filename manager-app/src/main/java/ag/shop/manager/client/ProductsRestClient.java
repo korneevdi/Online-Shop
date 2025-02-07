@@ -14,7 +14,7 @@ public interface ProductsRestClient {
 
     Optional<Product> findProduct(int productId);
 
-    void updateProduct(int productId, String title, String description);
+    void updateProduct(int productId, String title, String description, List<String> imageUrls);
 
     void deleteProduct(int productId);
 }

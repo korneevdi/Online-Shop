@@ -13,7 +13,7 @@ public interface ProductService {
 
     Optional<Product> findProduct(int productId);
 
-    void updateProduct(Integer id, String title, String description);
+    void updateProduct(Integer id, String title, String description, List<String> imageUrls);
 
     void deleteProduct(Integer id);
 }

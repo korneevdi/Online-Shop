@@ -40,7 +40,8 @@ public class ProductsRestController {
         }
 
         // Create a product with an image
-        Product product = this.productService.createProduct(payload.title(), payload.description(), payload.imageUrls());
+        Product product = this.productService
+                .createProduct(payload.title(), payload.description(), payload.imageUrls());
 
         return ResponseEntity
                 .created(uriComponentsBuilder
