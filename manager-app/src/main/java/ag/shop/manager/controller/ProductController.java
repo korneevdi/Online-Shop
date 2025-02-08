@@ -14,9 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.FieldError;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -49,8 +47,32 @@ public class ProductController {
                                 UpdateProductPayload payload,
                                 Model model) {
         try {
-            this.productsRestClient
-                    .updateProduct(product.id(), payload.title(), payload.description(), payload.imageUrls());
+            System.out.println("###### ManagerApp controller: Updating product ######");
+            System.out.println("Product ID: " + product.id());
+
+            List<String> oldImageUrls = product.imageUrls();
+            List<String> newImageUrls = payload.imageUrls();
+
+            System.out.println("Old Images:");
+            for (String oldImage : oldImageUrls) {
+                System.out.println(" - " + oldImage);
+            }
+
+            System.out.println("New Images from payload:");
+            if (newImageUrls != null) {
+                for (String newImage : newImageUrls) {
+                    System.out.println(" - " + newImage);
+                }
+            } else {
+                System.out.println("No new images received.");
+            }
+
+            if (newImageUrls == null || newImageUrls.equals(oldImageUrls)) {
+                newImageUrls = null;
+                System.out.println("No image changes detected, sending null.");
+            }
+
+            this.productsRestClient.updateProduct(product.id(), payload.title(), payload.description(), newImageUrls);
             return "redirect:/catalogue/products/%d".formatted(product.id());
         } catch (BadRequestException exception) {
             model.addAttribute("payload", payload);

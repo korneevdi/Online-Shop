@@ -69,17 +69,47 @@ public class DefaultProductService implements ProductService {
     public void updateProduct(Integer id, String title, String description, List<String> imageUrls) {
         this.productRepository.findById(id)
                 .ifPresentOrElse(product -> {
+                    System.out.println("###### DefaultProductService: Updating product ######");
+                    System.out.println("Product ID: " + id);
+                    System.out.println("Old Title: " + product.getTitle());
+                    System.out.println("New Title: " + title);
+                    System.out.println("Old Description: " + product.getDescription());
+                    System.out.println("New Description: " + description);
+
+                    // Log old images before clearing
+                    System.out.println("Old Images:");
+                    for (ProductImage image : product.getProductImages()) {
+                        System.out.println(" - " + image.getImageUrl());
+                    }
+
                     product.setTitle(title);
                     product.setDescription(description);
 
-                    // Delete all old images and add new images
+                    // Clear old images
                     product.getProductImages().clear();
 
+                    // Check if the list of images is empty
+                    if(product.getProductImages().isEmpty()) {
+                        System.out.println("Images cleared.");
+                    } else {
+                        for(ProductImage p : product.getProductImages()) {
+                            System.out.println(p.getImageUrl());
+                        }
+                    }
+
                     if (imageUrls != null && !imageUrls.isEmpty()) {
+                        System.out.println("New Images:");
                         List<ProductImage> newImages = imageUrls.stream()
+                                .distinct()
                                 .map(url -> new ProductImage(null, product, url))
                                 .toList();
+                        for (ProductImage image : newImages) {
+                            System.out.println(" - " + image.getImageUrl());
+                        }
+
                         product.getProductImages().addAll(newImages);
+                    } else {
+                        System.out.println("No new images received.");
                     }
                 }, () -> {throw new NoSuchElementException();
                 });
