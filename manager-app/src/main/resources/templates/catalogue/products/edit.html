@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Edit product &laquo;[[${product.title}]]&raquo; &ndash; Shop</title>
     <style>
-        /* Page background and layout */
+        /* Стили страницы */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -18,8 +18,7 @@
             align-items: center;
             padding: 20px;
         }
-
-        /* Buttons */
+        /* Кнопки */
         .button {
             display: inline-block;
             background-color: #4caf50;
@@ -32,12 +31,10 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s, transform 0.2s;
         }
-
         .button:hover {
             background-color: #45a049;
         }
-
-        /* Form container */
+        /* Контейнер формы */
         form {
             background-color: #fff;
             padding: 20px;
@@ -49,14 +46,12 @@
             flex-direction: column;
             align-items: center;
         }
-
         label {
             font-size: 1.1em;
             margin-bottom: 10px;
             text-align: left;
             width: 100%;
         }
-
         input[type="text"], textarea {
             width: 100%;
             padding: 10px;
@@ -66,11 +61,9 @@
             font-size: 1em;
             box-sizing: border-box;
         }
-
         textarea {
             height: 150px;
         }
-
         button {
             padding: 10px 20px;
             background-color: #4caf50;
@@ -81,12 +74,10 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
         button:hover {
             background-color: #45a049;
         }
-
-        /* Error messages */
+        /* Сообщения об ошибках */
         .error {
             font-size: 0.9em;
             color: red;
@@ -94,8 +85,7 @@
             width: 100%;
             margin-top: 5px;
         }
-
-        /* Navigation link */
+        /* Навигационная ссылка */
         .back-link {
             position: absolute;
             top: 20px;
@@ -105,12 +95,10 @@
             font-size: 1.2em;
             transition: color 0.3s;
         }
-
         .back-link:hover {
             color: #505050;
         }
-
-        /* Container for errors */
+        /* Контейнер ошибок */
         .error-container {
             width: 100%;
             max-width: 400px;
@@ -118,24 +106,21 @@
             margin: 10px 0;
             color: #e74c3c;
         }
-
-        /* Header for errors */
+        /* Заголовок ошибок */
         .error-header {
             font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 10px;
             color: #e74c3c;
         }
-
-        /* List of errors */
+        /* Список ошибок */
         .error-list {
             padding-left: 20px;
             margin: 0;
             color: #e74c3c;
             list-style-type: disc;
         }
-
-        /* Individual error item */
+        /* Индивидуальный элемент ошибки */
         .error-item {
             font-size: 0.95em;
             color: #e74c3c;
@@ -144,8 +129,7 @@
 </head>
 <body>
 
-<a class="back-link" data-th-href="@{/catalogue/products/{productId}(productId = ${product.id})}"> &larr; To the
-    product</a>
+<a class="back-link" data-th-href="@{/catalogue/products/{productId}(productId = ${product.id})}"> &larr; To the product</a>
 <h1>Edit product &laquo;[[${product.title}]]&raquo;</h1>
 
 <div data-th-if="${errors}" class="error-container">
@@ -164,16 +148,58 @@
     <label for="description">Description:</label>
     <textarea id="description" name="description"
               data-th-text="${payload != null ? payload.description : product.description}"
-              class="form-control">
-    </textarea>
+              class="form-control"></textarea>
 
-    <label for="imageUrls">Image URL:</label>
-    <input type="text" id="imageUrls" name="imageUrls"
-           data-th-value="${payload != null ? payload.imageUrls : product.imageUrls}"
-           class="form-control">
+    <label>Image URLs:</label>
+    <div id="imageUrlsContainer">
+        <!-- Выводим существующие ссылки -->
+        <div data-th-each="url : ${payload != null ? payload.imageUrls : product.imageUrls}" class="image-url-group">
+            <input type="text" name="imageUrls" data-th-value="${url}" class="form-control">
+            <button type="button" class="remove-image" onclick="removeImage(this)">Remove</button>
+        </div>
+    </div>
 
+    <button type="button" id="addImageUrl">Add Image URL</button>
     <button type="submit">Edit</button>
 </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("imageUrlsContainer");
+        const addButton = document.getElementById("addImageUrl");
+
+        // Добавить новое поле ввода для ссылки
+        addButton.addEventListener("click", function () {
+            const div = document.createElement("div");
+            div.classList.add("image-url-group");
+            div.innerHTML = `
+                <input type="text" name="imageUrls" class="form-control">
+                <button type="button" class="remove-image" onclick="removeImage(this)">Remove</button>
+            `;
+            container.appendChild(div);
+        });
+
+        // Функция удаления ссылки (исправленная)
+        window.removeImage = function (button) {
+            button.parentElement.remove(); // Полностью удаляем элемент из DOM
+        };
+
+        // Лог перед отправкой формы, чтобы проверить, какие ссылки отправляются
+        document.querySelector("form").addEventListener("submit", function (event) {
+            event.preventDefault(); // Остановим отправку, чтобы посмотреть данные
+            const formData = new FormData(event.target);
+            const imageUrls = [];
+            formData.forEach((value, key) => {
+                if (key === 'imageUrls' && value.trim() !== '') {
+                    imageUrls.push(value);
+                }
+            });
+
+            console.log("📤 Отправляемые данные:", { title: formData.get("title"), description: formData.get("description"), imageUrls: imageUrls });
+            event.target.submit(); // Отправляем после логирования
+        });
+    });
+</script>
 
 </body>
 </html>
