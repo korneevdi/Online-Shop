@@ -51,7 +51,7 @@ public class ProductController {
             System.out.println("Product ID: " + product.id());
 
             List<String> oldImageUrls = product.imageUrls();
-            List<String> newImageUrls = payload.imageUrls();
+            List<String> newImageUrls = payload.imageUrls() != null ? new ArrayList<>(payload.imageUrls()) : new ArrayList<>();
 
             System.out.println("Old Images:");
             for (String oldImage : oldImageUrls) {
@@ -59,20 +59,16 @@ public class ProductController {
             }
 
             System.out.println("New Images from payload:");
-            if (newImageUrls != null) {
-                for (String newImage : newImageUrls) {
-                    System.out.println(" - " + newImage);
-                }
-            } else {
-                System.out.println("No new images received.");
+            for (String newImage : newImageUrls) {
+                System.out.println(" - " + newImage);
             }
 
-            if (newImageUrls == null || newImageUrls.equals(oldImageUrls)) {
-                newImageUrls = null;
-                System.out.println("No image changes detected, sending null.");
-            }
+            // Удаляем пустые или null ссылки
+            newImageUrls.removeIf(url -> url == null || url.trim().isEmpty());
 
+            // ✅ Теперь, даже если список пуст, мы его отправляем (НЕ null)
             this.productsRestClient.updateProduct(product.id(), payload.title(), payload.description(), newImageUrls);
+
             return "redirect:/catalogue/products/%d".formatted(product.id());
         } catch (BadRequestException exception) {
             model.addAttribute("payload", payload);

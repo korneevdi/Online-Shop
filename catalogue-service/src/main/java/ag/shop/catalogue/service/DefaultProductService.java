@@ -2,20 +2,21 @@ package ag.shop.catalogue.service;
 
 import ag.shop.catalogue.entity.Product;
 import ag.shop.catalogue.entity.ProductImage;
+import ag.shop.catalogue.repository.ProductImageRepository;
 import ag.shop.catalogue.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class DefaultProductService implements ProductService {
 
     private final ProductRepository productRepository;
+
+    private final ProductImageRepository productImageRepository;
 
     @Override
     public Iterable<Product> findAllProducts(String filter) {
@@ -67,53 +68,54 @@ public class DefaultProductService implements ProductService {
     @Override
     @Transactional
     public void updateProduct(Integer id, String title, String description, List<String> imageUrls) {
-        this.productRepository.findById(id)
-                .ifPresentOrElse(product -> {
-                    System.out.println("###### DefaultProductService: Updating product ######");
-                    System.out.println("Product ID: " + id);
-                    System.out.println("Old Title: " + product.getTitle());
-                    System.out.println("New Title: " + title);
-                    System.out.println("Old Description: " + product.getDescription());
-                    System.out.println("New Description: " + description);
+        this.productRepository.findById(id).ifPresentOrElse(product -> {
+            System.out.println("###### DefaultProductService: Updating product ######");
+            System.out.println("Product ID: " + id);
 
-                    // Log old images before clearing
-                    System.out.println("Old Images:");
-                    for (ProductImage image : product.getProductImages()) {
-                        System.out.println(" - " + image.getImageUrl());
-                    }
+            List<ProductImage> oldImages = new ArrayList<>(product.getProductImages());
+            List<String> oldImageUrls = oldImages.stream()
+                    .map(ProductImage::getImageUrl)
+                    .toList();
 
-                    product.setTitle(title);
-                    product.setDescription(description);
+            System.out.println("Old Images: " + oldImageUrls);
+            System.out.println("New Images from payload: " + imageUrls);
 
-                    // Clear old images
-                    product.getProductImages().clear();
+            product.setTitle(title);
+            product.setDescription(description);
 
-                    // Check if the list of images is empty
-                    if(product.getProductImages().isEmpty()) {
-                        System.out.println("Images cleared.");
-                    } else {
-                        for(ProductImage p : product.getProductImages()) {
-                            System.out.println(p.getImageUrl());
-                        }
-                    }
+            // ✅ Проверяем, изменился ли список изображений
+            if (!new HashSet<>(oldImageUrls).equals(new HashSet<>(imageUrls))) {
+                System.out.println("❗ Changes detected. Updating images...");
 
-                    if (imageUrls != null && !imageUrls.isEmpty()) {
-                        System.out.println("New Images:");
-                        List<ProductImage> newImages = imageUrls.stream()
-                                .distinct()
-                                .map(url -> new ProductImage(null, product, url))
-                                .toList();
-                        for (ProductImage image : newImages) {
-                            System.out.println(" - " + image.getImageUrl());
-                        }
+                // Удаляем только те изображения, которых нет в новом списке
+                oldImages.stream()
+                        .filter(img -> !imageUrls.contains(img.getImageUrl())) // Если URL отсутствует в новом списке
+                        .forEach(productImageRepository::delete); // Удаляем из БД
 
-                        product.getProductImages().addAll(newImages);
-                    } else {
-                        System.out.println("No new images received.");
-                    }
-                }, () -> {throw new NoSuchElementException();
-                });
+                // Оставляем только те изображения, которые есть в новом списке
+                product.getProductImages().removeIf(img -> !imageUrls.contains(img.getImageUrl()));
+
+                // Добавляем новые изображения (только те, которых не было ранее)
+                List<ProductImage> newImages = imageUrls.stream()
+                        .filter(url -> !oldImageUrls.contains(url)) // Фильтруем только новые ссылки
+                        .map(url -> new ProductImage(null, product, url))
+                        .toList();
+
+                product.getProductImages().addAll(newImages);
+            } else {
+                System.out.println("✅ No image changes detected. Skipping update.");
+            }
+
+            productRepository.save(product); // Сохраняем изменения
+        }, () -> {
+            throw new NoSuchElementException();
+        });
     }
+
+
+
+
+
 
     @Override
     @Transactional

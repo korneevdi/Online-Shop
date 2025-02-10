@@ -37,14 +37,14 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<ProductImage> productImages; // Храним связи с изображениями
+    private List<ProductImage> productImages; // Store connections to images
 
     @Transient
     @JsonProperty("imageUrls")
     public List<String> getImageUrls() {
         if (productImages == null) return Collections.emptyList();
         return productImages.stream()
-                .map(ProductImage::getImageUrl) // Достаем imageUrl из ProductImage
+                .map(ProductImage::getImageUrl) // Get imageUrl from ProductImage
                 .collect(Collectors.toList());
     }
 }
