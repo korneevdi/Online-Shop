@@ -7,7 +7,10 @@ import ag.shop.manager.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,18 +34,6 @@ public class ProductsController {
     @PostMapping("create")
     public String createProduct(NewProductPayload payload,
                                 Model model) {
-        System.out.println("###### ProductsController module manager-app ######");
-        System.out.println("Received title: " + payload.title());
-        System.out.println("Received description: " + payload.description());
-        System.out.println("Received imageUrls:");
-        if(payload.imageUrls() != null) {
-            for (String url : payload.imageUrls()) {
-                System.out.println(url);
-            }
-        } else {
-            System.out.println("null");
-        }
-
         try {
             Product product = this.productsRestClient
                     .createProduct(payload.title(), payload.description(), payload.imageUrls());

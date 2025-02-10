@@ -13,9 +13,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -49,7 +47,8 @@ public class ProductRestController {
                 throw new BindException(bindingResult);
             }
         } else {
-            this.productService.updateProduct(productId, payload.title(), payload.description());
+            this.productService
+                    .updateProduct(productId, payload.title(), payload.description(), payload.imageUrls());
             return ResponseEntity.noContent()
                     .build();
         }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>New product &ndash; Shop</title>
     <style>
-        /* Page background and layout */
+        /* Background */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -87,12 +87,26 @@
         }
 
         /* Error messages */
-        .error {
-            font-size: 0.9em;
-            color: #e74c3c;
-            text-align: left;
+        .error-container {
             width: 100%;
-            margin-top: 5px;
+            max-width: 400px;
+            text-align: left;
+            margin: 10px 0;
+            color: #e74c3c;
+        }
+
+        .error-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #e74c3c;
+        }
+
+        .error-list {
+            padding-left: 20px;
+            margin: 0;
+            color: #e74c3c;
+            list-style-type: disc;
         }
 
         /* Navigation link */
@@ -110,35 +124,31 @@
             color: #505050;
         }
 
-        /* Container for errors */
-        .error-container {
-            width: 100%;
-            max-width: 400px;
-            text-align: left;
-            margin: 10px 0;
-            color: #e74c3c;
-        }
-
-        /* Header for errors */
-        .error-header {
-            font-size: 1.2em;
-            font-weight: bold;
+        /* Group for remove link and remove button */
+        .image-url-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 10px;
-            color: #e74c3c;
         }
 
-        /* List of errors */
-        .error-list {
-            padding-left: 20px;
-            margin: 0;
-            color: #e74c3c;
-            list-style-type: disc;
+        .image-url-group input {
+            flex-grow: 1;
         }
 
-        /* Individual error item */
-        .error-item {
-            font-size: 0.95em;
-            color: #e74c3c;
+        .remove-image {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .remove-image:hover {
+            background-color: #c0392b;
         }
     </style>
 </head>
@@ -157,23 +167,40 @@
 
 <form method="post" data-th-action="@{/catalogue/products/create}">
     <label for="title">Title:</label>
-    <input type="text" id="title" name="title"
-           data-th-value="${payload?.title}"
-           class="form-control" required>
+    <input type="text" id="title" name="title" data-th-value="${payload?.title}" class="form-control" required>
 
     <label for="description">Description:</label>
-    <textarea id="description" name="description"
-              data-th-text="${payload?.description}"
-              class="form-control">
-    </textarea>
+    <textarea id="description" name="description" data-th-text="${payload?.description}"
+              class="form-control"></textarea>
 
-    <label for="imageUrls">Image URL:</label>
-    <input type="text" id="imageUrls" name="imageUrls"
-           data-th-value="${payload?.imageUrls}"
-           class="form-control">
+    <label>Image URLs:</label>
+    <div id="imageUrlsContainer"></div>
 
+    <button type="button" id="addImageUrl">Add Image URL</button>
+    <br>
     <button type="submit">Create</button>
 </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("imageUrlsContainer");
+        const addButton = document.getElementById("addImageUrl");
+
+        addButton.addEventListener("click", function () {
+            const div = document.createElement("div");
+            div.classList.add("image-url-group");
+            div.innerHTML = `
+                <input type="text" name="imageUrls" class="form-control">
+                <button type="button" class="remove-image" onclick="removeImage(this)">Remove</button>
+            `;
+            container.appendChild(div);
+        });
+
+        window.removeImage = function (button) {
+            button.parentElement.remove();
+        };
+    });
+</script>
 
 </body>
 </html>

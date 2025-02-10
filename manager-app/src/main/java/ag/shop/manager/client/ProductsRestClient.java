@@ -1,7 +1,6 @@
 package ag.shop.manager.client;
 
 import ag.shop.manager.entity.Product;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +13,7 @@ public interface ProductsRestClient {
 
     Optional<Product> findProduct(int productId);
 
-    void updateProduct(int productId, String title, String description);
+    void updateProduct(int productId, String title, String description, List<String> imageUrls);
 
     void deleteProduct(int productId);
 }

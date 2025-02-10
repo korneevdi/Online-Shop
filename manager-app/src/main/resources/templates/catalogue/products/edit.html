@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Edit product &laquo;[[${product.title}]]&raquo; &ndash; Shop</title>
     <style>
-        /* Page background and layout */
+        /* Background */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -95,6 +95,33 @@
             margin-top: 5px;
         }
 
+        .error-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+            margin: 10px 0;
+            color: #e74c3c;
+        }
+
+        .error-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #e74c3c;
+        }
+
+        .error-list {
+            padding-left: 20px;
+            margin: 0;
+            color: #e74c3c;
+            list-style-type: disc;
+        }
+
+        .error-item {
+            font-size: 0.95em;
+            color: #e74c3c;
+        }
+
         /* Navigation link */
         .back-link {
             position: absolute;
@@ -110,35 +137,32 @@
             color: #505050;
         }
 
-        /* Container for errors */
-        .error-container {
-            width: 100%;
-            max-width: 400px;
-            text-align: left;
-            margin: 10px 0;
-            color: #e74c3c;
-        }
-
-        /* Header for errors */
-        .error-header {
-            font-size: 1.2em;
-            font-weight: bold;
+        /* Group for remove link and remove button */
+        .image-url-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 10px;
-            color: #e74c3c;
         }
 
-        /* List of errors */
-        .error-list {
-            padding-left: 20px;
-            margin: 0;
-            color: #e74c3c;
-            list-style-type: disc;
+        .image-url-group input {
+            flex-grow: 1;
         }
 
-        /* Individual error item */
-        .error-item {
-            font-size: 0.95em;
-            color: #e74c3c;
+        /* Red remove button */
+        .remove-image {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .remove-image:hover {
+            background-color: #c0392b;
         }
     </style>
 </head>
@@ -146,6 +170,7 @@
 
 <a class="back-link" data-th-href="@{/catalogue/products/{productId}(productId = ${product.id})}"> &larr; To the
     product</a>
+
 <h1>Edit product &laquo;[[${product.title}]]&raquo;</h1>
 
 <div data-th-if="${errors}" class="error-container">
@@ -160,17 +185,48 @@
     <input type="text" id="title" name="title"
            data-th-value="${payload != null ? payload.title : product.title}"
            class="form-control" required>
-    </div>
 
     <label for="description">Description:</label>
     <textarea id="description" name="description"
               data-th-text="${payload != null ? payload.description : product.description}"
-              class="form-control">
-    </textarea>
+              class="form-control"></textarea>
+
+    <label>Image URLs:</label>
+    <div id="imageUrlsContainer">
+        <!-- Display all existing links -->
+        <div data-th-each="url : ${payload != null ? payload.imageUrls : product.imageUrls}" class="image-url-group">
+            <input type="text" name="imageUrls" data-th-value="${url}" class="form-control">
+            <button type="button" class="remove-image" onclick="removeImage(this)">Remove</button>
+        </div>
     </div>
 
+    <button type="button" id="addImageUrl">Add Image URL</button>
+    <br>
     <button type="submit">Edit</button>
 </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("imageUrlsContainer");
+        const addButton = document.getElementById("addImageUrl");
+
+        // Add new field for new link
+        addButton.addEventListener("click", function () {
+            const div = document.createElement("div");
+            div.classList.add("image-url-group");
+            div.innerHTML = `
+                <input type="text" name="imageUrls" class="form-control">
+                <button type="button" class="remove-image" onclick="removeImage(this)">Remove</button>
+            `;
+            container.appendChild(div);
+        });
+
+        // Remove link function
+        window.removeImage = function (button) {
+            button.parentElement.remove();
+        };
+    });
+</script>
 
 </body>
 </html>
