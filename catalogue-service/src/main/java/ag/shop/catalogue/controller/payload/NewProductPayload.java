@@ -14,5 +14,5 @@ public record NewProductPayload(
         @Size(max = 1000, message = "{catalogue.products.create.errors.description_size_is_invalid}")
         String description,
 
-        List<@Size(max = 255, message = "{catalogue.products.create.errors.imageUrl_size_is_invalid}")String> imageUrls) {
+        List<@Size(max = 255, message = "{catalogue.products.create.errors.imageUrl_size_is_invalid}") String> imageUrls) {
 }

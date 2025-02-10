@@ -1,7 +1,6 @@
 package ag.shop.manager.client;
 
 import ag.shop.manager.entity.Product;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;
 import java.util.Optional;

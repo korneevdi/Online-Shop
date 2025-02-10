@@ -3,19 +3,13 @@ package ag.shop.manager.client;
 import ag.shop.manager.controller.payload.NewProductPayload;
 import ag.shop.manager.controller.payload.UpdateProductPayload;
 import ag.shop.manager.entity.Product;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
-import org.springframework.validation.FieldError;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -44,7 +38,7 @@ public class ProductsRestClientImpl implements ProductsRestClient {
         System.out.println("Received title: " + title);
         System.out.println("Received description: " + description);
         System.out.println("Received imageUrls:");
-        if(imageUrls != null) {
+        if (imageUrls != null) {
             for (String url : imageUrls) {
                 System.out.println(url);
             }
@@ -68,13 +62,13 @@ public class ProductsRestClientImpl implements ProductsRestClient {
 
     @Override
     public Optional<Product> findProduct(int productId) {
-        try{
+        try {
             return Optional.of(this.restClient
                     .get()
                     .uri("/catalogue-api/products/{productId}", productId)
                     .retrieve()
                     .body(Product.class));
-        } catch(HttpClientErrorException.NotFound exception) {
+        } catch (HttpClientErrorException.NotFound exception) {
             return Optional.empty();
         }
     }
@@ -97,13 +91,13 @@ public class ProductsRestClientImpl implements ProductsRestClient {
 
     @Override
     public void deleteProduct(int productId) {
-        try{
+        try {
             this.restClient
                     .delete()
                     .uri("/catalogue-api/products/{productId}", productId)
                     .retrieve()
                     .toBodilessEntity();
-        } catch(HttpClientErrorException.NotFound exception) {
+        } catch (HttpClientErrorException.NotFound exception) {
             throw new NoSuchElementException(exception);
         }
     }

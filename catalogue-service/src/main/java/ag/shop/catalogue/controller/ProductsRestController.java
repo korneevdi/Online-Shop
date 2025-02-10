@@ -5,7 +5,6 @@ import ag.shop.catalogue.entity.Product;
 import ag.shop.catalogue.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -49,5 +48,4 @@ public class ProductsRestController {
                         .build(Map.of("productId", product.getId())))
                 .body(product);
     }
-
 }

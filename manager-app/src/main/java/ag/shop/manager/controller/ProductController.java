@@ -4,7 +4,6 @@ import ag.shop.manager.client.BadRequestException;
 import ag.shop.manager.client.ProductsRestClient;
 import ag.shop.manager.controller.payload.UpdateProductPayload;
 import ag.shop.manager.entity.Product;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -12,10 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.FieldError;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("catalogue/products/{productId:\\d+}")
@@ -47,26 +47,12 @@ public class ProductController {
                                 UpdateProductPayload payload,
                                 Model model) {
         try {
-            System.out.println("###### ManagerApp controller: Updating product ######");
-            System.out.println("Product ID: " + product.id());
+            List<String> newImageUrls =
+                    payload.imageUrls() != null ? new ArrayList<>(payload.imageUrls()) : new ArrayList<>();
 
-            List<String> oldImageUrls = product.imageUrls();
-            List<String> newImageUrls = payload.imageUrls() != null ? new ArrayList<>(payload.imageUrls()) : new ArrayList<>();
-
-            System.out.println("Old Images:");
-            for (String oldImage : oldImageUrls) {
-                System.out.println(" - " + oldImage);
-            }
-
-            System.out.println("New Images from payload:");
-            for (String newImage : newImageUrls) {
-                System.out.println(" - " + newImage);
-            }
-
-            // Удаляем пустые или null ссылки
+            // Remove empty or null links
             newImageUrls.removeIf(url -> url == null || url.trim().isEmpty());
 
-            // ✅ Теперь, даже если список пуст, мы его отправляем (НЕ null)
             this.productsRestClient.updateProduct(product.id(), payload.title(), payload.description(), newImageUrls);
 
             return "redirect:/catalogue/products/%d".formatted(product.id());

@@ -20,7 +20,7 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public Iterable<Product> findAllProducts(String filter) {
-        if(filter != null && !filter.isBlank()) {
+        if (filter != null && !filter.isBlank()) {
             return this.productRepository.findAllByTitleLikeIgnoreCase("%" + filter + "%");
         } else {
             return this.productRepository.findAll();
@@ -30,17 +30,6 @@ public class DefaultProductService implements ProductService {
     @Override
     @Transactional
     public Product createProduct(String title, String description, List<String> imageUrls) {
-        System.out.println("###### DefaultProductService module catalogue-service ######");
-        System.out.println("Received title: " + title);
-        System.out.println("Received description: " + description);
-        System.out.println("Received imageUrls:");
-        if(imageUrls != null) {
-            for (String url : imageUrls) {
-                System.out.println(url);
-            }
-        } else {
-            System.out.println("null");
-        }
 
         Product product = new Product();
         product.setTitle(title);
@@ -59,63 +48,46 @@ public class DefaultProductService implements ProductService {
 
     @Override
     public Optional<Product> findProduct(int productId) {
-        Optional<Product> product = this.productRepository.findById(productId);
-        System.out.println("###### DefaultProductService: Retrieved product ######");
-        System.out.println(product);
-        return product;
+        return this.productRepository.findById(productId);
     }
 
     @Override
     @Transactional
     public void updateProduct(Integer id, String title, String description, List<String> imageUrls) {
         this.productRepository.findById(id).ifPresentOrElse(product -> {
-            System.out.println("###### DefaultProductService: Updating product ######");
-            System.out.println("Product ID: " + id);
 
             List<ProductImage> oldImages = new ArrayList<>(product.getProductImages());
             List<String> oldImageUrls = oldImages.stream()
                     .map(ProductImage::getImageUrl)
                     .toList();
 
-            System.out.println("Old Images: " + oldImageUrls);
-            System.out.println("New Images from payload: " + imageUrls);
-
             product.setTitle(title);
             product.setDescription(description);
 
-            // ✅ Проверяем, изменился ли список изображений
+            // Check whether the link list changed
             if (!new HashSet<>(oldImageUrls).equals(new HashSet<>(imageUrls))) {
-                System.out.println("❗ Changes detected. Updating images...");
 
-                // Удаляем только те изображения, которых нет в новом списке
+                // Remove only the images that absent in new list
                 oldImages.stream()
-                        .filter(img -> !imageUrls.contains(img.getImageUrl())) // Если URL отсутствует в новом списке
-                        .forEach(productImageRepository::delete); // Удаляем из БД
+                        .filter(img -> !imageUrls.contains(img.getImageUrl()))
+                        .forEach(productImageRepository::delete);
 
-                // Оставляем только те изображения, которые есть в новом списке
                 product.getProductImages().removeIf(img -> !imageUrls.contains(img.getImageUrl()));
 
-                // Добавляем новые изображения (только те, которых не было ранее)
+                // Add new images (only those that were not there before)
                 List<ProductImage> newImages = imageUrls.stream()
-                        .filter(url -> !oldImageUrls.contains(url)) // Фильтруем только новые ссылки
+                        .filter(url -> !oldImageUrls.contains(url))
                         .map(url -> new ProductImage(null, product, url))
                         .toList();
 
                 product.getProductImages().addAll(newImages);
-            } else {
-                System.out.println("✅ No image changes detected. Skipping update.");
             }
 
-            productRepository.save(product); // Сохраняем изменения
+            productRepository.save(product);
         }, () -> {
             throw new NoSuchElementException();
         });
     }
-
-
-
-
-
 
     @Override
     @Transactional
