@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Edit product &laquo;[[${product.title}]]&raquo; &ndash; Shop</title>
     <style>
-        /* Стили страницы */
+        /* Background */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -18,7 +18,8 @@
             align-items: center;
             padding: 20px;
         }
-        /* Кнопки */
+
+        /* Buttons */
         .button {
             display: inline-block;
             background-color: #4caf50;
@@ -31,10 +32,12 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s, transform 0.2s;
         }
+
         .button:hover {
             background-color: #45a049;
         }
-        /* Контейнер формы */
+
+        /* Form container */
         form {
             background-color: #fff;
             padding: 20px;
@@ -46,12 +49,14 @@
             flex-direction: column;
             align-items: center;
         }
+
         label {
             font-size: 1.1em;
             margin-bottom: 10px;
             text-align: left;
             width: 100%;
         }
+
         input[type="text"], textarea {
             width: 100%;
             padding: 10px;
@@ -61,9 +66,11 @@
             font-size: 1em;
             box-sizing: border-box;
         }
+
         textarea {
             height: 150px;
         }
+
         button {
             padding: 10px 20px;
             background-color: #4caf50;
@@ -74,10 +81,12 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         button:hover {
             background-color: #45a049;
         }
-        /* Сообщения об ошибках */
+
+        /* Error messages */
         .error {
             font-size: 0.9em;
             color: red;
@@ -85,7 +94,35 @@
             width: 100%;
             margin-top: 5px;
         }
-        /* Навигационная ссылка */
+
+        .error-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+            margin: 10px 0;
+            color: #e74c3c;
+        }
+
+        .error-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #e74c3c;
+        }
+
+        .error-list {
+            padding-left: 20px;
+            margin: 0;
+            color: #e74c3c;
+            list-style-type: disc;
+        }
+
+        .error-item {
+            font-size: 0.95em;
+            color: #e74c3c;
+        }
+
+        /* Navigation link */
         .back-link {
             position: absolute;
             top: 20px;
@@ -95,41 +132,45 @@
             font-size: 1.2em;
             transition: color 0.3s;
         }
+
         .back-link:hover {
             color: #505050;
         }
-        /* Контейнер ошибок */
-        .error-container {
-            width: 100%;
-            max-width: 400px;
-            text-align: left;
-            margin: 10px 0;
-            color: #e74c3c;
-        }
-        /* Заголовок ошибок */
-        .error-header {
-            font-size: 1.2em;
-            font-weight: bold;
+
+        /* Group for remove link and remove button */
+        .image-url-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 10px;
-            color: #e74c3c;
         }
-        /* Список ошибок */
-        .error-list {
-            padding-left: 20px;
-            margin: 0;
-            color: #e74c3c;
-            list-style-type: disc;
+
+        .image-url-group input {
+            flex-grow: 1;
         }
-        /* Индивидуальный элемент ошибки */
-        .error-item {
-            font-size: 0.95em;
-            color: #e74c3c;
+
+        /* Red remove button */
+        .remove-image {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .remove-image:hover {
+            background-color: #c0392b;
         }
     </style>
 </head>
 <body>
 
-<a class="back-link" data-th-href="@{/catalogue/products/{productId}(productId = ${product.id})}"> &larr; To the product</a>
+<a class="back-link" data-th-href="@{/catalogue/products/{productId}(productId = ${product.id})}"> &larr; To the
+    product</a>
+
 <h1>Edit product &laquo;[[${product.title}]]&raquo;</h1>
 
 <div data-th-if="${errors}" class="error-container">
@@ -152,7 +193,7 @@
 
     <label>Image URLs:</label>
     <div id="imageUrlsContainer">
-        <!-- Выводим существующие ссылки -->
+        <!-- Display all existing links -->
         <div data-th-each="url : ${payload != null ? payload.imageUrls : product.imageUrls}" class="image-url-group">
             <input type="text" name="imageUrls" data-th-value="${url}" class="form-control">
             <button type="button" class="remove-image" onclick="removeImage(this)">Remove</button>
@@ -160,6 +201,7 @@
     </div>
 
     <button type="button" id="addImageUrl">Add Image URL</button>
+    <br>
     <button type="submit">Edit</button>
 </form>
 
@@ -168,7 +210,7 @@
         const container = document.getElementById("imageUrlsContainer");
         const addButton = document.getElementById("addImageUrl");
 
-        // Добавить новое поле ввода для ссылки
+        // Add new field for new link
         addButton.addEventListener("click", function () {
             const div = document.createElement("div");
             div.classList.add("image-url-group");
@@ -179,25 +221,10 @@
             container.appendChild(div);
         });
 
-        // Функция удаления ссылки (исправленная)
+        // Remove link function
         window.removeImage = function (button) {
-            button.parentElement.remove(); // Полностью удаляем элемент из DOM
+            button.parentElement.remove();
         };
-
-        // Лог перед отправкой формы, чтобы проверить, какие ссылки отправляются
-        document.querySelector("form").addEventListener("submit", function (event) {
-            event.preventDefault(); // Остановим отправку, чтобы посмотреть данные
-            const formData = new FormData(event.target);
-            const imageUrls = [];
-            formData.forEach((value, key) => {
-                if (key === 'imageUrls' && value.trim() !== '') {
-                    imageUrls.push(value);
-                }
-            });
-
-            console.log("📤 Отправляемые данные:", { title: formData.get("title"), description: formData.get("description"), imageUrls: imageUrls });
-            event.target.submit(); // Отправляем после логирования
-        });
     });
 </script>
 
