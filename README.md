@@ -41,7 +41,7 @@ Follow the steps below to set up and run the project locally.
 1. Clone the repository to your local machine. Open the terminal, go to the folder you want to save this project in, and give the command:
 
 ```
-https://github.com/korneevdi/Shop_Product_Management.git
+https://github.com/korneevdi/Online-Shop.git
 ```
 
 2. Set up the database for the product catalogue. This is the database for your products.
