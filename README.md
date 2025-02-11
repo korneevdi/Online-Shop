@@ -5,10 +5,10 @@ A modular Java-based web application for managing products in an online store. T
 - __Catalogue Service__: A REST API for managing the product catalog (the __catalogue-service__ module).
   
     Built with: Spring Boot, Spring Security, JPA, and PostgreSQL.
-- __Manager App__: A web-based application for administrators to manage products (add, update, delete) (the __manager-app__ module).
+- __Manager App__: A web-based application for administrators to manage products (add, update, delete, attach photos) (the __manager-app__ module).
 
     Built with: Spring Boot, Spring Security, Thymeleaf, PostgreSQL, and a REST client.
-- __Customer App__: A web-based application for customers to browse and view products (the __customer-app__ module).
+- __Customer App__: A web-based application for customers to browse and view products with photos (the __customer-app__ module).
 
     Built with: Spring Boot, Thymeleaf, and a REST client.
 
