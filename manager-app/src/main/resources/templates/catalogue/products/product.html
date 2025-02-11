@@ -94,6 +94,35 @@
             justify-content: center;
             gap: 10px;
         }
+
+        .image-gallery {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .product-image {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+        }
+
+        .no-images {
+            display: block;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -106,15 +135,20 @@
         <li><strong>Product ID:</strong> <span data-th-text="${product.id}"></span></li>
         <li><strong>Title:</strong> <span data-th-text="${product.title}"></span></li>
         <li><strong>Description:</strong> <span data-th-text="${product.description}"></span></li>
-        <li>
-            <strong>Image URLs:</strong>
-            <ul data-th-if="${product.imageUrls != null and not #lists.isEmpty(product.imageUrls)}">
-                <li data-th-each="url : ${product.imageUrls}" data-th-text="${url}"></li>
-            </ul>
-            <span data-th-if="${product.imageUrls == null or #lists.isEmpty(product.imageUrls)}">No images</span>
-        </li>
     </ul>
 </div>
+
+<!-- Image gallery -->
+<div class="image-gallery" data-th-if="${product.imageUrls != null and not #lists.isEmpty(product.imageUrls)}">
+    <h2>Product Images</h2>
+    <div class="image-container">
+        <img data-th-each="url : ${product.imageUrls}" data-th-src="${url}" alt="Product image" class="product-image">
+    </div>
+</div>
+
+<br>
+<span class="no-images" data-th-if="${product.imageUrls == null or #lists.isEmpty(product.imageUrls)}">No images</span>
+<br>
 
 <div class="button-container">
     <a data-th-href="@{/catalogue/products/{productId}/edit(productId=${product.id})}" class="button">Edit product</a>
